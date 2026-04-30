@@ -1,4 +1,4 @@
-# Python-generated files
+# Python
 __pycache__/
 *.py[oc]
 build/
@@ -6,12 +6,25 @@ dist/
 wheels/
 *.egg-info
 
-# Virtual environments
-.venv
+# Virtual environment
+.venv/
+
+# Secrets
 .env
+
+# Spark JARs
 infra/jars/
+
+# Airflow
 airflow/logs/
 airflow/*.db
 airflow/*.cfg
-__pycache__/
+
+# dbt
+news_pipeline/target/
+news_pipeline/dbt_packages/
+news_pipeline/logs/
+
+# Misc
+logs/
 .cache/

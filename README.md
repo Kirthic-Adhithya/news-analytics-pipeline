@@ -58,10 +58,6 @@ NewsAPI → Kafka Producer → Apache Kafka → Spark Structured Streaming
 - Bronze layer data partitioned by category (technology, business, science, health, entertainment)
 - 30+ JSON files landing in R2 per trigger with proper partition structure
 
----
-
-## In Progress
-
 ### Batch Transformation
 - Apache Airflow DAG for daily orchestration
 - PySpark cleaning job (deduplication, null handling, timestamp normalization)
@@ -70,6 +66,10 @@ NewsAPI → Kafka Producer → Apache Kafka → Spark Structured Streaming
 ### Warehouse + dbt Models
 - dbt models: `fact_articles`, `dim_sources`, `agg_daily_trends`
 - dbt tests for data quality validation
+
+---
+
+## In Progress
 
 ### Dashboard
 - Metabase dashboards: trending topics, sentiment over time, source comparisons

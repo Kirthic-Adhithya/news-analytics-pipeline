@@ -10,3 +10,8 @@ wheels/
 .venv
 .env
 infra/jars/
+airflow/logs/
+airflow/*.db
+airflow/*.cfg
+__pycache__/
+.cache/

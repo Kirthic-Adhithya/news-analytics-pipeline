@@ -46,13 +46,13 @@ NewsAPI → Kafka Producer → Apache Kafka → Spark Structured Streaming
 
 ## Completed Phases
 
-### Week 1 — Kafka Ingestion Layer
+### Kafka Ingestion Layer
 - Set up Apache Kafka cluster using Docker Compose (Zookeeper + Kafka + Kafka UI)
 - Built a Kafka producer that polls 5 news categories from NewsAPI every 30 minutes
 - Streams structured JSON records into `raw_news` Kafka topic with 3 partitions
 - Verified real-time message flow with 90+ articles per poll cycle
 
-### Week 2 — Spark Streaming → Cloud Storage
+### Spark Streaming → Cloud Storage
 - Configured PySpark 3.5.0 with Structured Streaming to consume from Kafka
 - Integrated S3A connector to write to Cloudflare R2 (S3-compatible object storage)
 - Bronze layer data partitioned by category (technology, business, science, health, entertainment)
@@ -62,16 +62,16 @@ NewsAPI → Kafka Producer → Apache Kafka → Spark Structured Streaming
 
 ## In Progress
 
-### Week 3 — Batch Transformation
+### Batch Transformation
 - Apache Airflow DAG for daily orchestration
 - PySpark cleaning job (deduplication, null handling, timestamp normalization)
 - Sentiment enrichment using HuggingFace DistilBERT model
 
-### Week 4 — Warehouse + dbt Models
+### Warehouse + dbt Models
 - dbt models: `fact_articles`, `dim_sources`, `agg_daily_trends`
 - dbt tests for data quality validation
 
-### Week 5 — Dashboard
+### Dashboard
 - Metabase dashboards: trending topics, sentiment over time, source comparisons
 
 ---

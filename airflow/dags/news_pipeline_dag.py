@@ -3,8 +3,6 @@ from airflow.operators.bash import BashOperator
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 import sys
-import os
-
 sys.path.insert(0, '/home/kirthic/news-pipeline')
 
 default_args = {
@@ -21,10 +19,14 @@ def run_sentiment():
     from transformation.sentiment_enricher import run_sentiment_job
     run_sentiment_job()
 
+def run_neon_sync():
+    from transformation.neon_sync import main
+    main()
+
 with DAG(
     dag_id="news_pipeline",
     default_args=default_args,
-    description="Daily news pipeline: clean + sentiment enrich",
+    description="Daily news pipeline: clean + sentiment + neon sync",
     schedule_interval="0 6 * * *",
     start_date=datetime(2024, 1, 1),
     catchup=False,
@@ -41,4 +43,9 @@ with DAG(
         python_callable=run_sentiment,
     )
 
-    clean_task >> sentiment_task
+    neon_sync_task = PythonOperator(
+        task_id="sync_to_neon",
+        python_callable=run_neon_sync,
+    )
+
+    clean_task >> sentiment_task >> neon_sync_task

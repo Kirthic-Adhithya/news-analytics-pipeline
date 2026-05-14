@@ -3,9 +3,6 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from sqlalchemy import create_engine, text
-from dotenv import load_dotenv
-
-load_dotenv()
 
 # ── Page Config ───────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -17,33 +14,36 @@ st.set_page_config(
 # ── Connection ────────────────────────────────────────────────────────────────
 @st.cache_resource
 def get_engine():
-    return create_engine(os.getenv("NEON_CONNECTION_STRING"))
+    # Streamlit Cloud uses st.secrets, local uses env var
+    try:
+        conn_str = st.secrets["NEON_CONNECTION_STRING"]
+    except Exception:
+        from dotenv import load_dotenv
+        load_dotenv()
+        conn_str = os.getenv("NEON_CONNECTION_STRING")
+
+    if not conn_str:
+        st.error("NEON_CONNECTION_STRING not found in secrets or environment.")
+        st.stop()
+
+    return create_engine(conn_str)
 
 @st.cache_data(ttl=300)
-def load_data():
+def load_table(query):
     engine = get_engine()
     with engine.connect() as conn:
-        facts = pd.DataFrame(
-            conn.execute(text("SELECT * FROM analytics.fact_articles")).fetchall()
-        ).set_axis(
-            conn.execute(text("SELECT * FROM analytics.fact_articles LIMIT 0")).keys(),
-            axis=1
-        )
-        trends = pd.DataFrame(
-            conn.execute(text("SELECT * FROM analytics.agg_daily_trends")).fetchall()
-        ).set_axis(
-            conn.execute(text("SELECT * FROM analytics.agg_daily_trends LIMIT 0")).keys(),
-            axis=1
-        )
-        sources = pd.DataFrame(
-            conn.execute(text("SELECT * FROM analytics.dim_sources")).fetchall()
-        ).set_axis(
-            conn.execute(text("SELECT * FROM analytics.dim_sources LIMIT 0")).keys(),
-            axis=1
-        )
-    facts["sentiment_score"] = pd.to_numeric(facts["sentiment_score"], errors="coerce")
-    trends["avg_sentiment_score"] = pd.to_numeric(trends["avg_sentiment_score"], errors="coerce")
-    sources["total_articles"] = pd.to_numeric(sources["total_articles"], errors="coerce")
+        result = conn.execute(text(query))
+        return pd.DataFrame(result.fetchall(), columns=result.keys())
+
+def load_data():
+    facts   = load_table("SELECT * FROM analytics.fact_articles")
+    trends  = load_table("SELECT * FROM analytics.agg_daily_trends")
+    sources = load_table("SELECT * FROM analytics.dim_sources")
+
+    facts["sentiment_score"]          = pd.to_numeric(facts["sentiment_score"], errors="coerce")
+    trends["avg_sentiment_score"]     = pd.to_numeric(trends["avg_sentiment_score"], errors="coerce")
+    sources["total_articles"]         = pd.to_numeric(sources["total_articles"], errors="coerce")
+
     return facts, trends, sources
 
 # ── Load Data ─────────────────────────────────────────────────────────────────
@@ -59,7 +59,7 @@ col1, col2, col3, col4 = st.columns(4)
 col1.metric("Total Articles", len(facts))
 col2.metric("Categories", facts["category"].nunique())
 col3.metric("Sources", facts["source_name"].nunique())
-col4.metric("Avg Sentiment", f"{pd.to_numeric(facts['sentiment_score'], errors='coerce').mean():.3f}")
+col4.metric("Avg Sentiment", f"{facts['sentiment_score'].mean():.3f}")
 
 st.divider()
 
@@ -110,10 +110,7 @@ with col1:
 
 with col2:
     st.subheader("Top News Sources")
-    top_sources = (
-        sources.sort_values("total_articles", ascending=False)
-        .head(15)
-    )
+    top_sources = sources.sort_values("total_articles", ascending=False).head(15)
     fig = px.bar(
         top_sources, x="total_articles", y="source_name",
         orientation="h",

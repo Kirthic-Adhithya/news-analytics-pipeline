@@ -1,4 +1,4 @@
-# 📰 Real-Time News Analytics Pipeline
+#  Real-Time News Analytics Pipeline
 
 ![Status](https://img.shields.io/badge/Status-Live-brightgreen)
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
@@ -10,17 +10,17 @@
 
 > An end-to-end real-time data engineering pipeline that ingests live news articles, streams them through Apache Kafka, processes with PySpark, enriches with AI sentiment analysis, and serves insights via a live public dashboard.
 
-🔴 **[Live Dashboard →](https://news-analytics-pipeline-kirthic.streamlit.app/)**
+ **[Live Dashboard →](https://news-analytics-pipeline-kirthic.streamlit.app/)**
 
 ---
 
-## 📸 Dashboard Preview
+##  Dashboard Preview
 
 ![Dashboard Preview](docs/dashboard_preview.jpeg)
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 NewsAPI (5 categories)
@@ -35,19 +35,19 @@ Apache Kafka  ──  raw_news topic · 3 partitions
 PySpark Structured Streaming 3.5.0
         │
         ▼
-Cloudflare R2 ── 🥉 Bronze Layer (JSON · partitioned by category)
+Cloudflare R2 ──  Bronze Layer (JSON · partitioned by category)
         │
         ▼
 PySpark Cleaner  (dedup · null handling · timestamp normalization)
         │
         ▼
-Cloudflare R2 ── 🥈 Silver Layer (Snappy Parquet)
+Cloudflare R2 ──  Silver Layer (Snappy Parquet)
         │
         ▼
 DistilBERT Sentiment Enricher (HuggingFace · POSITIVE/NEGATIVE/NEUTRAL)
         │
         ▼
-Cloudflare R2 ── 🥇 Gold Layer (Enriched Snappy Parquet)
+Cloudflare R2 ──  Gold Layer (Enriched Snappy Parquet)
         │
         ▼
 PostgreSQL 15 (Docker · raw_gold_articles)
@@ -59,14 +59,14 @@ dbt 1.11.8  ──  stg_articles · dim_sources · fact_articles · agg_daily_tr
 Neon Serverless PostgreSQL (Cloud · Singapore)
         │
         ▼
-Streamlit Dashboard  ──  🔴 Live at streamlit.app
+Streamlit Dashboard  ──   Live at streamlit.app
 ```
 
 > Orchestrated end-to-end by Apache Airflow 2.9.0
 
 ---
 
-## 🚀 Live Demo
+##  Live Demo
 
 **[https://news-analytics-pipeline-kirthic.streamlit.app/](https://news-analytics-pipeline-kirthic.streamlit.app/)**
 
@@ -80,7 +80,7 @@ The dashboard shows:
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
@@ -98,7 +98,7 @@ The dashboard shows:
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 news-analytics-pipeline/
@@ -129,7 +129,7 @@ news-analytics-pipeline/
 
 ---
 
-## ⚙️ Setup & Run
+##  Setup & Run
 
 ### Prerequisites
 - Windows 11 + WSL2 Ubuntu 24.04
@@ -194,7 +194,7 @@ streamlit run dashboard/app.py
 
 ---
 
-## 📊 dbt Models
+##  dbt Models
 
 | Model | Materialisation | Description |
 |-------|----------------|-------------|
@@ -207,7 +207,7 @@ streamlit run dashboard/app.py
 
 ---
 
-## 🗓️ Build Timeline
+##  Build Timeline
 
 | Week | Milestone | Status |
 |------|-----------|--------|
@@ -221,7 +221,7 @@ streamlit run dashboard/app.py
 
 ---
 
-## 🔑 Environment Variables
+##  Environment Variables
 
 ```env
 NEWSAPI_KEY=
@@ -240,7 +240,7 @@ NEON_CONNECTION_STRING=
 
 ---
 
-## 💡 Key Learnings
+##  Key Learnings
 
 - Designing a Lambda architecture with streaming (Kafka + Spark) and batch (Airflow) layers
 - Managing JAR dependencies and version compatibility in PySpark
@@ -250,7 +250,7 @@ NEON_CONNECTION_STRING=
 
 ---
 
-## 👤 Author
+##  Author
 
 **Kirthic Adhithya** — Data Engineering Portfolio Project
 

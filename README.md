@@ -1,12 +1,12 @@
 #  Real-Time News Analytics Pipeline
 
-![Status](https://img.shields.io/badge/Status-Live-brightgreen)
+![Status](https://img.shields.io/badge/Status-Offline-red)
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![PySpark](https://img.shields.io/badge/PySpark-3.5.0-orange)
 ![Kafka](https://img.shields.io/badge/Kafka-7.4.0-black)
 ![dbt](https://img.shields.io/badge/dbt-1.11.8-red)
 ![Airflow](https://img.shields.io/badge/Airflow-2.9.0-017CEE)
-![License](https://img.shields.io/badge/License-MIT-green)
+<!-- ![License](https://img.shields.io/badge/License-MIT-green) -->
 
 > An end-to-end real-time data engineering pipeline that ingests live news articles, streams them through Apache Kafka, processes with PySpark, enriches with AI sentiment analysis, and serves insights via a live public dashboard.
 
